@@ -42,11 +42,11 @@ func newQueue(items []*Applicant) queue {
 	return &sliceQueue{items}
 }
 
-func (a Applicant) String() string {
+func (a *Applicant) String() string {
 	return a.name
 }
 
-func (p Program) String() string {
+func (p *Program) String() string {
 	return p.name
 }
 
@@ -64,7 +64,7 @@ func NewProgram(name string, size int, ranking []*Applicant) *Program {
 
 // Match an applicant to this program and return true
 // if successful, false otherwise.
-func (p Program) match(a *Applicant, q queue) bool {
+func (p *Program) match(a *Applicant, q queue) bool {
 	var rank int
 	var ranked bool
 	if rank, ranked = p.ranking[a]; !ranked {

@@ -7,25 +7,26 @@ func TestMatch(t *testing.T) {
 	var dawson, chen, perez, patel *Applicant
 
 	dawson = &Applicant{
-		name:    "Dawson",
-		ranking: []*Program{memorial, albany, pikesville},
+		name: "Dawson",
 	}
 	chen = &Applicant{
-		name:    "Chen",
-		ranking: []*Program{pikesville, albany, memorial},
+		name: "Chen",
 	}
 	perez = &Applicant{
-		name:    "Perez",
-		ranking: []*Program{pikesville, albany},
+		name: "Perez",
 	}
 	patel = &Applicant{
-		name:    "Patel",
-		ranking: []*Program{albany},
+		name: "Patel",
 	}
 
 	pikesville = NewProgram("Pikesville", 1, []*Applicant{perez, patel, chen})
 	memorial = NewProgram("Memorial", 2, []*Applicant{perez, dawson, patel})
 	albany = NewProgram("Albany", 2, []*Applicant{chen, dawson, perez, patel})
+
+	dawson.ranking = []*Program{memorial, albany, pikesville}
+	chen.ranking = []*Program{pikesville, albany, memorial}
+	perez.ranking = []*Program{pikesville, albany}
+	patel.ranking = []*Program{albany}
 
 	expectedMatching := map[*Program][]*Applicant{
 		pikesville: []*Applicant{perez},

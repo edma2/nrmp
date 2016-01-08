@@ -37,12 +37,17 @@ func NewProgram(name string, size int, ranking []*Applicant) *Program {
 // Match an applicant to this program and return true
 // if successful, false otherwise.
 func (p Program) Match(a *Applicant) bool {
-	for i := 0; i < len(p.matches); i++ {
-		if p.matches[i] == nil {
+	var rank int
+	var ranked bool
+	if rank, ranked = p.ranking[a]; !ranked {
+		return false
+	}
+	for i, m := range p.matches {
+		if m == nil {
 			p.matches[i] = a
 			return true
 		} else {
-			if p.ranking[a] > p.ranking[p.matches[i]] {
+			if rank < p.ranking[m] {
 				p.matches[i] = a
 				return true
 			}
@@ -55,5 +60,12 @@ func (p Program) Match(a *Applicant) bool {
 // will contain the assignments. If an error is encountered, return
 // a non-nil error.
 func Match(as []*Applicant) error {
+	for _, a := range as {
+		for _, p := range a.ranking {
+			if p.Match(a) {
+				break
+			}
+		}
+	}
 	return nil
 }

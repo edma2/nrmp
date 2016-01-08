@@ -63,26 +63,26 @@ func NewProgram(name string, size int, ranking []*Applicant) *Program {
 }
 
 // Match an applicant to this program and return true
-// if successful, false otherwise.
-func (p *Program) match(a *Applicant, q queue) bool {
+// if successful, false otherwise. The existing match that
+// was kicked out is also returned.
+func (p *Program) match(a *Applicant) (*Applicant, bool) {
 	var rank int
 	var ranked bool
 	if rank, ranked = p.ranking[a]; !ranked {
-		return false
+		return nil, false
 	}
 	for i, m := range p.matches {
 		if m == nil {
 			p.matches[i] = a
-			return true
+			return nil, true
 		} else {
 			if rank < p.ranking[m] {
 				p.matches[i] = a
-				q.add(m)
-				return true
+				return m, true
 			}
 		}
 	}
-	return false
+	return nil, false
 }
 
 // Run the match algorithm. After it is finished, program slots
@@ -93,7 +93,10 @@ func Match(as []*Applicant) error {
 	for !q.empty() {
 		a := q.get()
 		for _, p := range a.ranking {
-			if p.match(a, q) {
+			if old, ok := p.match(a); ok {
+				if old != nil {
+					q.add(old)
+				}
 				break
 			}
 		}

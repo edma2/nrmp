@@ -88,7 +88,7 @@ func (p *Program) match(a *Applicant) (*Applicant, bool) {
 // a non-nil error.
 func Match(as []*Applicant) error {
 	q := newQueue(as)
-	for a := q.get(); a != nil; a=q.get() {
+	for a := q.get(); a != nil; a = q.get() {
 		for _, p := range a.ranking {
 			if old, ok := p.match(a); ok {
 				if old != nil {
